@@ -10,11 +10,13 @@ namespace ValheimPlus.Configurations
         public AdvancedEditingModeConfiguration AdvancedEditingMode { get; set; }
         public BeehiveConfiguration Beehive { get; set; }
         public BuildingConfiguration Building { get; set; }
+        public DeconstructConfiguration Deconstruct { get; set; }
         public InventoryConfiguration Inventory { get; set; }
         public ItemsConfiguration Items { get; set; }
         public FermenterConfiguration Fermenter { get; set; }
-        public FireplaceConfiguration Fireplace { get; set; }
+        public FireSourceConfiguration FireSource { get; set; }
         public FoodConfiguration Food { get; set; }
+        public SmelterConfiguration Smelter { get; set; }
         public FurnaceConfiguration Furnace { get; set; }
         public HotkeyConfiguration Hotkeys { get; set; }
         public KilnConfiguration Kiln { get; set; }
@@ -35,5 +37,11 @@ namespace ValheimPlus.Configurations
         public GatherConfiguration Gathering { get; set; }
         public DurabilityConfiguration Durability { get; set; }
         public ArmorConfiguration Armor { get; set; }
+	    public FreePlacementRotationConfiguration FreePlacementRotation { get; set; }
+        public ShieldConfiguration Shields { get; set; }
+        public FirstPersonConfiguration FirstPerson { get; internal set; }
+        public GridAlignmentConfiguration GridAlignment { get; set; }
+        public CraftFromChestConfiguration CraftFromChest { get; set; }
+        public ValheimPlusConfiguration ValheimPlus { get; set; }
     }
 }

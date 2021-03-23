@@ -1,7 +1,8 @@
 ﻿using HarmonyLib;
 using ValheimPlus.Configurations;
+using System.Diagnostics;
 
-namespace ValheimPlus
+namespace ValheimPlus.GameClasses
 {
 	/// <summary>
 	/// Disable weather damage
@@ -17,11 +18,48 @@ namespace ValheimPlus
             }
         }
     }
-	
+
+	/// <summary>
+	/// Disable weather damage under water
+	/// </summary>
+	[HarmonyPatch(typeof(WearNTear), "IsUnderWater")]
+	public static class RemoveWearNTearFromUnderWater
+	{
+		private static void Postfix(ref bool __result)
+		{
+			if (Configuration.Current.Building.IsEnabled && Configuration.Current.Building.noWeatherDamage)
+			{
+				__result = false;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Disable damage to player structures
+	/// </summary>
+	[HarmonyPatch(typeof(WearNTear), "ApplyDamage")]
+	public static class WearNTear_ApplyDamage_Patch
+	{
+        private static bool Prefix(ref WearNTear __instance, ref float damage)
+        {
+            // Gets the name of the method calling the ApplyDamage method
+            StackTrace stackTrace = new StackTrace();
+            string callingMethod = stackTrace.GetFrame(2).GetMethod().Name;
+
+            if (!(Configuration.Current.StructuralIntegrity.IsEnabled && __instance.m_piece && __instance.m_piece.IsPlacedByPlayer() && callingMethod != "UpdateWear"))
+                return true;
+
+            if (__instance.m_piece.m_name.StartsWith("$ship"))
+                return !Configuration.Current.StructuralIntegrity.disableDamageToPlayerBoats;
+
+            return !Configuration.Current.StructuralIntegrity.disableDamageToPlayerStructures;
+        }
+	}
+
 	/// <summary>
 	/// Disable structural integrity
 	/// </summary>
-    [HarmonyPatch(typeof(WearNTear), "GetMaterialProperties")]
+	[HarmonyPatch(typeof(WearNTear), "GetMaterialProperties")]
     public static class RemoveStructualIntegrity
     {
         private static bool Prefix(ref WearNTear __instance, out float maxSupport, out float minSupport, out float horizontalLoss, out float verticalLoss)

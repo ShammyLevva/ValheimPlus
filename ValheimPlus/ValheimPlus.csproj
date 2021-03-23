@@ -330,9 +330,19 @@
   <ItemGroup>
     <Compile Include="AdvancedBuildingMode.cs" />
     <Compile Include="AdvancedEditingMode.cs" />
+    <Compile Include="Configurations\Sections\CraftFromChestConfiguration.cs" />
+    <Compile Include="Configurations\Sections\FirstPersonConfiguration.cs" />
+    <Compile Include="Configurations\Sections\DeconstructConfiguration.cs" />
     <Compile Include="Configurations\Sections\ArmorConfiguration.cs" />
     <Compile Include="Configurations\Sections\DurabilityConfiguration.cs" />
+    <Compile Include="Configurations\Sections\SmelterConfiguration.cs" />
+    <Compile Include="Configurations\Sections\FreePlacementRotationConfiguration.cs" />
     <Compile Include="Configurations\Sections\GatherConfiguration.cs" />
+    <Compile Include="Configurations\Sections\ShieldConfiguration.cs" />
+    <Compile Include="Configurations\Sections\ValheimPlusConfiguration.cs" />
+    <Compile Include="Deconstruct.cs" />
+    <Compile Include="FirstPerson\VPlusFirstPerson.cs" />
+    <Compile Include="FreePlacementRotation.cs" />
     <Compile Include="GameClasses\Beehive.cs" />
     <Compile Include="Configurations\BaseConfig.cs" />
     <Compile Include="Configurations\Configuration.cs" />
@@ -341,6 +351,7 @@
     <Compile Include="Configurations\Sections\AdvancedEditingModeConfiguration.cs" />
     <Compile Include="Configurations\Sections\BeehiveConfiguration.cs" />
     <Compile Include="Configurations\Sections\BuildingConfiguration.cs" />
+    <Compile Include="Configurations\Sections\GridAlignmentConfiguration.cs" />
     <Compile Include="Configurations\Sections\FermenterConfiguration.cs" />
     <Compile Include="Configurations\Sections\FoodConfiguration.cs" />
     <Compile Include="Configurations\Sections\FurnaceConfiguration.cs" />
@@ -352,7 +363,7 @@
     <Compile Include="Configurations\Sections\MapConfiguration.cs" />
     <Compile Include="Configurations\Sections\PlayerConfiguration.cs" />
     <Compile Include="Configurations\Sections\ServerConfiguration.cs" />
-    <Compile Include="Configurations\Sections\FireplaceConfiguration.cs" />
+    <Compile Include="Configurations\Sections\FireSourceConfiguration.cs" />
     <Compile Include="Configurations\Sections\TimeConfiguration.cs" />
     <Compile Include="Configurations\Sections\WagonConfiguration.cs" />
     <Compile Include="Configurations\Sections\WardConfiguration.cs" />
@@ -363,17 +374,29 @@
     <Compile Include="Configurations\Sections\WorkbenchConfiguration.cs" />
     <Compile Include="Configurations\Sections\StaminaUsageConfiguration.cs" />
     <Compile Include="Configurations\Sections\StaminaConfiguration.cs" />
+    <Compile Include="GameClasses\Container.cs" />
+    <Compile Include="GameClasses\CookingStation.cs" />
     <Compile Include="GameClasses\DropTable.cs" />
     <Compile Include="GameClasses\FejdStartup.cs" />
     <Compile Include="GameClasses\Fireplace.cs" />
     <Compile Include="GameClasses\GameCamera.cs" />
     <Compile Include="GameClasses\Hud.cs" />
+    <Compile Include="GameClasses\SE_Rested.cs" />
+    <Compile Include="GameClasses\Piece.cs" />
+    <Compile Include="GameClasses\StationExtension.cs" />
+    <Compile Include="GameClasses\Attack.cs" />
+    <Compile Include="GameClasses\TeleportWorld.cs" />
     <Compile Include="GameClasses\Humanoid.cs" />
+    <Compile Include="RPC\VPlusAck.cs" />
+    <Compile Include="Utility\GameObjectAssistant.cs" />
+    <Compile Include="Utility\InventoryAssistant.cs" />
+    <Compile Include="Utility\ListExtensions.cs" />
+    <Compile Include="Utility\RPCQueue.cs" />
+    <Compile Include="Utility\ZPackageExtensions.cs" />
     <Compile Include="ValheimPlus.cs" />
     <Compile Include="GameClasses\Fermenter.cs" />
     <Compile Include="GameClasses\Inventory.cs" />
     <Compile Include="GameClasses\Console.cs" />
-    <Compile Include="GameClasses\ZDOMan.cs" />
     <Compile Include="GameClasses\ZNet.cs" />
     <Compile Include="GameClasses\Skills.cs" />
     <Compile Include="GameClasses\ItemDrop.cs" />
@@ -382,7 +405,7 @@
     <Compile Include="GameClasses\Game.cs" />
     <Compile Include="RPC\VPlusConfigSync.cs" />
     <Compile Include="GameClasses\SteamGameServer.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="RPC\VPlusMapSync.cs" />
     <Compile Include="GameClasses\Minimap.cs" />
     <Compile Include="GameClasses\Smelter.cs" />
     <Compile Include="UI\VPlusMainMenu.cs" />
@@ -392,10 +415,11 @@
     <Compile Include="GameClasses\WearNTear.cs" />
     <Compile Include="GameClasses\EnvMan.cs" />
     <Compile Include="GameClasses\Ward.cs" />
-    <Compile Include="GameClasses\InventoryGUI.cs" />
+    <Compile Include="GameClasses\InventoryGui.cs" />
     <Compile Include="GameClasses\CraftingStation.cs" />
     <Compile Include="Utility\Helper.cs" />
     <Compile Include="Utility\ZNetExtensions.cs" />
+    <Compile Include="VPlusDataObjects.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -403,6 +427,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\logo.png" />
+    <EmbeddedResource Include="Assets\ZapHosting.png" />
+    <EmbeddedResource Include="Assets\ZapHosting_hover.png" />
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup />
@@ -410,7 +436,9 @@
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetDir)ValheimPlus.dll" "$(VALHEIM_INSTALL)\BepInEx\plugins\ValheimPlus.dll"
 copy "$(TargetDir)ValheimPlus.pdb" "$(VALHEIM_INSTALL)\BepInEx\plugins\ValheimPlus.pdb"
-copy "$(TargetDir)ValheimPlus.dll.config" "$(VALHEIM_INSTALL)\BepInEx\plugins\ValheimPlus.dll.config"</PostBuildEvent>
+copy "$(TargetDir)ValheimPlus.dll.config" "$(VALHEIM_INSTALL)\BepInEx\plugins\ValheimPlus.dll.config"
+$(SolutionDir)resources\tools\pdb2mdb.exe "$(TargetPath)"
+copy "$(TargetDir)\ValheimPlus.dll.mdb" "$(VALHEIM_INSTALL)\BepInEx\plugins\ValheimPlus.dll.mdb"</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

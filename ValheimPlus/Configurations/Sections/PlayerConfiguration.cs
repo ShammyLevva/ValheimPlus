@@ -8,6 +8,12 @@
         public bool disableCameraShake { get; internal set; } = false;
         public float baseUnarmedDamage { get; internal set; } = 0;
         public bool cropNotifier { get; internal set; } = false;
-
+        public float restSecondsPerComfortLevel { get; internal set; } = 60;
+        public float deathPenaltyMultiplier { get; internal set; } = 0;
+        public bool autoRepair { get; internal set; } = false;
+        public float guardianBuffDuration { get; internal set; } = 300;
+        public float guardianBuffCooldown { get; internal set; } = 1200;
+        public bool disableGuardianBuffAnimation { get; internal set; } = false;
+        public bool autoEquipShield { get; internal set; } = false;
     }
 }
